@@ -1041,18 +1041,6 @@
 })();
 </script>
 
-  document.querySelectorAll('a.gift-buy[data-gift-key]').forEach(function (a) {
-    var key = a.getAttribute('data-gift-key');
-    var url = MP_LINKS[key];
-    if (typeof url === 'string' && /^https?:\/\//i.test(url.trim())) {
-      a.setAttribute('href', url.trim());
-      a.classList.remove('gift-buy--pending');
-    } else {
-      a.setAttribute('aria-disabled', 'true');
-    }
-  });
-})();
-</script>
 <script>
 (function () {
   var cb = document.getElementById('nav-menu-toggle');
