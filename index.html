@@ -78,13 +78,9 @@
       transition: color .3s;
     }
     nav ul a:hover { color: var(--gold); }
-    nav {
-  transition: transform 0.35s ease;
-}
+    
 
-nav.nav-hidden {
-  transform: translateY(-100%);
-}
+
 ``
 
     /* ── HERO ── */
@@ -410,36 +406,25 @@ nav.nav-hidden {
       html { scroll-behavior: auto; }
       .intro-headline, .intro-aside { animation: none !important; }
     }
-  </style>
+  
+/* ===== AUTO HIDE NAV (MOBILE ONLY – DEFINITIVO) ===== */
+@media (max-width: 768px) {
+  nav {
+    transform: translateY(0) !important;
+    transition: transform 0.35s ease !important;
+    will-change: transform;
+  }
+
+  nav.nav-hidden {
+    transform: translateY(-110%) !important;
+  }
+}
+
+</style>
 </head>
 <body>
 <script>
-(function () {
-  let lastScrollY = window.scrollY;
-  const nav = document.querySelector('nav');
 
-  if (!nav) return;
-
-  window.addEventListener('scroll', () => {
-    const currentScrollY = window.scrollY;
-
-    // Só reage depois de um pequeno scroll (evita piscar no topo)
-    if (currentScrollY > 80) {
-      if (currentScrollY > lastScrollY) {
-        // Rolando para baixo → esconde
-        nav.classList.add('nav-hidden');
-      } else {
-        // Rolando para cima → mostra
-        nav.classList.remove('nav-hidden');
-      }
-    } else {
-      // No topo, sempre visível
-      nav.classList.remove('nav-hidden');
-    }
-
-    lastScrollY = currentScrollY;
-  });
-})();
 </script>
 ``
 <nav>
@@ -1063,68 +1048,37 @@ nav.nav-hidden {
 <!-- Cole abaixo, em MP_LINKS, o link de pagamento do Mercado Pago de cada item (mesma chave data-gift-key). -->
 
 <script>
-(function () {
 
-  var LINK_PADRAO = 'https://link.mercadopago.com.br/chadpanelaclaraedavi';
-
-  document.querySelectorAll('a.gift-buy[data-gift-key]').forEach(function (a) {
-    a.setAttribute('href', LINK_PADRAO);
-    a.classList.remove('gift-buy--pending');
-    a.setAttribute('target', '_blank');
-    a.setAttribute('rel', 'noopener noreferrer');
-  });
-
-})();
 </script>
-
-<script>
-(function () {
-  var cb = document.getElementById('nav-menu-toggle');
-  var panel = document.getElementById('nav-panel');
-  if (cb && panel) {
-    panel.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () { cb.checked = false; });
-    });
-  }
-})();
-</script>
-
-<footer>
-  <div class="footer-names">Davi &amp; Clara</div>
-  Chá de Panela · 29 de Maio de 2026 · Fortaleza, CE
-</footer>
 
 
 <script>
+/* ===== AUTO HIDE NAV SCRIPT (MOBILE ONLY – DEFINITIVO) ===== */
 (function () {
-  if (window.innerWidth > 768) return; // only mobile
+  if (!window.matchMedia('(max-width: 768px)').matches) return;
 
   const nav = document.querySelector('nav');
   if (!nav) return;
 
-  let lastScrollY = window.pageYOffset;
+  let lastY = window.pageYOffset;
   let ticking = false;
 
-  function onScroll() {
-    const currentScrollY = window.pageYOffset;
+  function update() {
+    const y = window.pageYOffset;
 
-    if (currentScrollY > 100) {
-      if (currentScrollY > lastScrollY) {
-        nav.classList.add('nav-hidden');
-      } else {
-        nav.classList.remove('nav-hidden');
-      }
+    if (y > 120 && y > lastY) {
+      nav.classList.add('nav-hidden');
     } else {
       nav.classList.remove('nav-hidden');
     }
 
-    lastScrollY = currentScrollY;
+    lastY = y;
     ticking = false;
   }
 
-  window.addEventListener('scroll', function () {
+  window.addEventListener('scroll', () => {
     if (!ticking) {
-      window.requestAnimationFrame(onScroll);
+      requestAnimationFrame(update);
       ticking = true;
     }
   }, { passive: true });
