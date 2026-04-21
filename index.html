@@ -1025,40 +1025,22 @@
 </section>
 
 <!-- Cole abaixo, em MP_LINKS, o link de pagamento do Mercado Pago de cada item (mesma chave data-gift-key). -->
+
 <script>
 (function () {
-  var MP_LINKS = {
-    'jogo-lencois': '',
-    'travesseiro': '',
-    'guarda-roupa': '',
-    'arara-roupa': '',
-    'ferro-de-passar': '',
-    'tabua-de-passar': '',
-    'escrivaninha': '',
-    'cadeira-escritorio': '',
-    'estante-livros': '',
-    'cesto-lixo-escritorio': '',
-    'toalhas-banho': '',
-    'toalha-mao': '',
-    'tapete-banheiro': '',
-    'cesto-lixo-banheiro': '',
-    'baldes': '',
-    'armario-cozinha': '',
-    'geladeira': '',
-    'fogao': '',
-    'mesinha': '',
-    'lixeiras': '',
-    'jogo-panelas': '',
-    'jogo-talheres': '',
-    'jogo-copos': '',
-    'jogo-xicaras': '',
-    'jogo-pratos-xicaras': '',
-    'garrafas-agua': '',
-    'potes-comida': '',
-    'liquidificador': '',
-    'maquina-lavar': '',
-    'cesto-roupa-suja': ''
-  };
+
+  var LINK_PADRAO = 'https://link.mercadopago.com.br/chadpanelaclaraedavi';
+
+  document.querySelectorAll('a.gift-buy[data-gift-key]').forEach(function (a) {
+    a.setAttribute('href', LINK_PADRAO);
+    a.classList.remove('gift-buy--pending');
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+  });
+
+})();
+</script>
+
   document.querySelectorAll('a.gift-buy[data-gift-key]').forEach(function (a) {
     var key = a.getAttribute('data-gift-key');
     var url = MP_LINKS[key];
