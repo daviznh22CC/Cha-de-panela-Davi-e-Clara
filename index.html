@@ -78,6 +78,14 @@
       transition: color .3s;
     }
     nav ul a:hover { color: var(--gold); }
+    nav {
+  transition: transform 0.35s ease;
+}
+
+nav.nav-hidden {
+  transform: translateY(-100%);
+}
+``
 
     /* ── HERO ── */
     .intro {
@@ -405,7 +413,35 @@
   </style>
 </head>
 <body>
+<script>
+(function () {
+  let lastScrollY = window.scrollY;
+  const nav = document.querySelector('nav');
 
+  if (!nav) return;
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+
+    // Só reage depois de um pequeno scroll (evita piscar no topo)
+    if (currentScrollY > 80) {
+      if (currentScrollY > lastScrollY) {
+        // Rolando para baixo → esconde
+        nav.classList.add('nav-hidden');
+      } else {
+        // Rolando para cima → mostra
+        nav.classList.remove('nav-hidden');
+      }
+    } else {
+      // No topo, sempre visível
+      nav.classList.remove('nav-hidden');
+    }
+
+    lastScrollY = currentScrollY;
+  });
+})();
+</script>
+``
 <nav>
   <div class="logo">Chá de Panela ✦ Davi & Clara</div>
   <div class="nav-actions">
