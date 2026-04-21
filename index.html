@@ -939,7 +939,139 @@
   }
 })();
 </script>
+<!-- CONFIRMAÇÃO DE PRESENÇA -->
+<section id="confirmacao" style="background: var(--surface); padding: 60px 20px;">
+  <div class="section-title">Confirmar Presença</div>
+  <div class="section-sub">Aguardamos sua resposta até 20 de Maio</div>
+  
+  <div style="max-width: 500px; margin: 0 auto; background: var(--white); border-radius: 12px; padding: 36px 32px; border: 1px solid var(--line); box-shadow: 0 4px 24px var(--shadow);">
+    <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.08rem; color: var(--ink-muted); text-align: center; margin-bottom: 28px; line-height: 1.7;">
+      "Sua presença é o presente mais bonito que podemos receber."
+    </p>
 
+    <form onsubmit="event.preventDefault(); enviarConfirmacao();">
+      <div style="margin-bottom: 22px;">
+        <label for="rsvp-nome" style="display: block; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 8px; font-weight: 500;">
+          Seu nome
+        </label>
+        <input 
+          type="text" 
+          id="rsvp-nome" 
+          placeholder="Nome completo" 
+          required
+          style="width: 100%; padding: 12px 16px; border: 1px solid rgba(46,36,24,0.15); border-radius: 6px; font-family: 'Jost', sans-serif; font-size: 1rem; background: var(--cream); color: var(--ink); transition: border-color 0.3s;"
+        >
+      </div>
+
+      <div style="margin-bottom: 28px;">
+        <label style="display: block; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 12px; font-weight: 500;">
+          Você irá ao evento?
+        </label>
+        <div style="display: flex; gap: 14px;">
+          <div style="flex: 1; position: relative;">
+            <input 
+              type="radio" 
+              id="rsvp-sim" 
+              name="rsvp-presenca" 
+              value="Sim, estarei presente! 🎉"
+              required
+              style="position: absolute; opacity: 0; width: 0; height: 0;"
+            >
+            <label for="rsvp-sim" style="display: flex; align-items: center; justify-content: center; padding: 12px 16px; border: 1px solid rgba(61,47,30,0.15); border-radius: 6px; cursor: pointer; letter-spacing: 1px; transition: all 0.3s; background: var(--cream); font-size: 0.85rem; font-weight: 500; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0;">
+              ✓ Sim, irei!
+            </label>
+          </div>
+          <div style="flex: 1; position: relative;">
+            <input 
+              type="radio" 
+              id="rsvp-nao" 
+              name="rsvp-presenca" 
+              value="Infelizmente não poderei comparecer."
+              required
+              style="position: absolute; opacity: 0; width: 0; height: 0;"
+            >
+            <label for="rsvp-nao" style="display: flex; align-items: center; justify-content: center; padding: 12px 16px; border: 1px solid rgba(61,47,30,0.15); border-radius: 6px; cursor: pointer; letter-spacing: 1px; transition: all 0.3s; background: var(--cream); font-size: 0.85rem; font-weight: 500; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0;">
+              ✗ Não poderei
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <p id="rsvp-status" style="font-family: 'Jost', sans-serif; font-size: 0.9rem; text-align: center; margin: 12px 0; min-height: 1.4em; color: var(--ink-muted);" aria-live="polite"></p>
+
+      <button 
+        type="submit" 
+        id="rsvp-btn-enviar"
+        style="width: 100%; padding: 16px; background: var(--gold); color: white; border: none; border-radius: 6px; font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; margin-top: 8px; transition: background 0.3s; font-weight: 600; box-shadow: 0 3px 10px rgba(160, 120, 64, 0.28);"
+      >
+        Enviar Confirmação
+      </button>
+    </form>
+  </div>
+</section>
+
+<script>
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xbdqakla';
+
+  async function enviarConfirmacao() {
+    const statusEl = document.getElementById('rsvp-status');
+    const btn = document.getElementById('rsvp-btn-enviar');
+    const nome = document.getElementById('rsvp-nome').value.trim();
+    const presencaEl = document.querySelector('input[name="rsvp-presenca"]:checked');
+
+    statusEl.textContent = '';
+    statusEl.style.color = 'var(--ink-muted)';
+
+    if (!nome) {
+      alert('Por favor, informe seu nome.');
+      return;
+    }
+    if (!presencaEl) {
+      alert('Por favor, indique se você irá ou não.');
+      return;
+    }
+
+    const presenca = presencaEl.value;
+
+    btn.disabled = true;
+    const textoOriginal = btn.textContent;
+    btn.textContent = 'Enviando...';
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          nome,
+          presenca,
+          _subject: 'Confirmação de presença — Chá de Panela Davi & Clara'
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const msg = data.error || data.errors?.map((e) => e.message).join(' ') || 'Não foi possível enviar. Tente de novo.';
+        throw new Error(msg);
+      }
+
+      statusEl.textContent = 'Confirmação enviada com sucesso! Obrigado por responder.';
+      statusEl.style.color = '#2d6a4f';
+
+      document.getElementById('rsvp-nome').value = '';
+      document.querySelectorAll('input[name="rsvp-presenca"]').forEach((el) => { el.checked = false; });
+    } catch (e) {
+      statusEl.textContent = e.message || 'Erro ao enviar. Verifique sua conexão e tente novamente.';
+      statusEl.style.color = '#9d0208';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = textoOriginal;
+    }
+  }
+</script>
 <footer>
   <div class="footer-names">Davi &amp; Clara</div>
   Chá de Panela · 29 de Maio de 2026 · Fortaleza, CE
