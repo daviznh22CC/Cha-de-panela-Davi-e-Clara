@@ -3,7 +3,7 @@
 
 const CONFIG = {
   MP_LINK: 'https://link.mercadopago.com.br/chadpanelaclaraedavi',
-  TARGET_DATE: '2026-05-29T19:30:00'
+  TARGET_DATE: '2026-06-26T19:30:00'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
