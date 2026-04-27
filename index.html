@@ -1148,10 +1148,16 @@
 
 </section>
 
-<!-- Cole abaixo, em MP_LINKS, o link de pagamento do Mercado Pago de cada item (mesma chave data-gift-key). -->
-
+<!-- Link único de pagamento do Mercado Pago para TODOS os presentes -->
 <script>
+  // Link único de pagamento do Chá de Panela da Clara e Davi
+  const MP_LINK = 'https://link.mercadopago.com.br/chadpanelaclaraedavi';
 
+  // Aplica o link em todos os botões "Presentear" e os ativa
+  document.querySelectorAll('a.gift-buy[data-gift-key]').forEach(btn => {
+    btn.href = MP_LINK;
+    btn.classList.remove('gift-buy--pending');
+  });
 </script>
 
 
