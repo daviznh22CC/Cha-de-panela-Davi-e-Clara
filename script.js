@@ -12,7 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavScroll();
   initFormHandling();
   initScrollReveal();
+  initImageFadeIn();
 });
+
+// 6. Fade-in de Imagens (Melhoria Visual)
+function initImageFadeIn() {
+  const images = document.querySelectorAll('.gift-card-media img');
+  images.forEach(img => {
+    if (img.complete) {
+      img.classList.add('loaded');
+    } else {
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+      });
+    }
+  });
+}
 
 // 5. Scroll Reveal (Intersection Observer)
 function initScrollReveal() {
@@ -64,26 +79,21 @@ function initCountdown() {
       return;
     }
 
-    const d = Math.floor(distance / 86400000);
-    const h = Math.floor((distance % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000); // Fixed variable name below
-  }
-  
-  // Refined update function for better performance
-  const update = () => {
-    const now = Date.now();
-    const diff = targetDate - now;
+    // Refined update function for better performance
+    const update = () => {
+      const now = Date.now();
+      const diff = targetDate - now;
 
-    if (diff <= 0) {
-      Object.values(els).forEach(el => el.textContent = '00');
-      return;
-    }
+      if (diff <= 0) {
+        Object.values(els).forEach(el => el.textContent = '00');
+        return;
+      }
 
-    els.days.textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
-    els.hours.textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
-    els.minutes.textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
-    els.seconds.textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-  };
+      els.days.textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
+      els.hours.textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+      els.minutes.textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+      els.seconds.textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+    };
 
   update();
   setInterval(update, 1000);
