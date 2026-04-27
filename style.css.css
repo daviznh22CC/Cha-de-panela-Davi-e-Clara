@@ -246,6 +246,39 @@ section { padding: 80px 20px; max-width: 1100px; margin: 0 auto; }
 
 .gift-received { background: var(--sage); pointer-events: none; opacity: 0.85; }
 
+/* Animações de Revelação (Scroll Reveal) */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Skeleton Loading Suave para Imagens */
+.gift-card-media {
+  background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Feedback de Toque para Mobile */
+@media (hover: none) {
+  .gift-buy:active, .submit-btn:active, .map-btn:active {
+    transform: scale(0.95);
+    filter: brightness(0.9);
+  }
+}
+
 /* Mobile Adjustments */
 @media (max-width: 768px) {
   .intro-inner { grid-template-columns: 1fr; }
