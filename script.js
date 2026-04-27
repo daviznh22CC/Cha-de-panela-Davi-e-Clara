@@ -1,93 +1,108 @@
-/* ===== CHÁ DE PANELA — DAVI & CLARA ===== */
-/* JavaScript otimizado e organizado */
-
+/* ===== CHÁ DE PANELA — DAVI & CLARA (OTIMIZADO) ===== */
 'use strict';
 
-// ===== CONFIGURAÇÕES =====
-const MP_LINK = 'https://link.mercadopago.com.br/chadpanelaclaraedavi';
+const CONFIG = {
+  MP_LINK: 'https://link.mercadopago.com.br/chadpanelaclaraedavi',
+  TARGET_DATE: '2026-05-29T19:30:00'
+};
 
-// ===== INICIALIZAÇÃO =====
 document.addEventListener('DOMContentLoaded', () => {
   initGiftButtons();
   initCountdown();
-  initAutoHideNav();
+  initNavScroll();
   initFormHandling();
 });
 
-// ===== BOTÕES DE PRESENTES =====
+// 1. Botões de Presentes
 function initGiftButtons() {
   const giftButtons = document.querySelectorAll('a.gift-buy[data-gift-key]');
   giftButtons.forEach(btn => {
-    btn.href = MP_LINK;
-    btn.classList.remove('gift-buy--pending');
+    if (!btn.classList.contains('gift-received')) {
+      btn.href = CONFIG.MP_LINK;
+      btn.classList.remove('gift-buy--pending');
+    }
   });
 }
 
-// ===== CONTAGEM REGRESSIVA =====
+// 2. Countdown Otimizado (Performance e Precisão)
 function initCountdown() {
-  const targetDate = new Date('2026-05-29T19:30:00').getTime();
+  const targetDate = new Date(CONFIG.TARGET_DATE).getTime();
+  const els = {
+    days: document.getElementById('days'),
+    hours: document.getElementById('hours'),
+    minutes: document.getElementById('minutes'),
+    seconds: document.getElementById('seconds')
+  };
+
+  if (!els.days) return;
 
   function updateCountdown() {
-    const now = new Date().getTime();
+    const now = Date.now();
     const distance = targetDate - now;
 
     if (distance < 0) {
-      document.getElementById('days').textContent = '0';
-      document.getElementById('hours').textContent = '0';
-      document.getElementById('minutes').textContent = '0';
-      document.getElementById('seconds').textContent = '0';
+      Object.values(els).forEach(el => el.textContent = '00');
       return;
     }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById('days').textContent = String(days).padStart(2, '0');
-    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    const d = Math.floor(distance / 86400000);
+    const h = Math.floor((distance % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000); // Fixed variable name below
   }
+  
+  // Refined update function for better performance
+  const update = () => {
+    const now = Date.now();
+    const diff = targetDate - now;
 
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-}
-
-// ===== AUTO HIDE NAV (MOBILE ONLY) =====
-function initAutoHideNav() {
-  if (!window.matchMedia('(max-width: 768px)').matches) return;
-
-  const nav = document.querySelector('nav');
-  if (!nav) return;
-
-  let lastY = window.pageYOffset;
-  let ticking = false;
-
-  function update() {
-    const y = window.pageYOffset;
-
-    if (y > 120 && y > lastY) {
-      nav.classList.add('nav-hidden');
-    } else {
-      nav.classList.remove('nav-hidden');
+    if (diff <= 0) {
+      Object.values(els).forEach(el => el.textContent = '00');
+      return;
     }
 
-    lastY = y;
-    ticking = false;
-  }
+    els.days.textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
+    els.hours.textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+    els.minutes.textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+    els.seconds.textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+  };
+
+  update();
+  setInterval(update, 1000);
+}
+
+// 3. Navegação Inteligente (Hide on Scroll com RequestAnimationFrame)
+function initNavScroll() {
+  const nav = document.getElementById('main-nav');
+  if (!nav) return;
+
+  let lastScroll = window.pageYOffset;
+  let ticking = false;
 
   window.addEventListener('scroll', () => {
     if (!ticking) {
-      requestAnimationFrame(update);
+      window.requestAnimationFrame(() => {
+        const currentScroll = window.pageYOffset;
+        
+        // Esconde ao rolar para baixo, mostra ao rolar para cima
+        if (currentScroll <= 100) {
+          nav.classList.remove('nav-hidden');
+        } else if (currentScroll > lastScroll) {
+          nav.classList.add('nav-hidden');
+        } else {
+          nav.classList.remove('nav-hidden');
+        }
+        
+        lastScroll = currentScroll;
+        ticking = false;
+      });
       ticking = true;
     }
   }, { passive: true });
 }
 
-// ===== FORM HANDLING =====
+// 4. RSVP com Feedback Visual Melhorado
 function initFormHandling() {
-  const form = document.querySelector('form');
+  const form = document.getElementById('rsvp-form');
   if (!form) return;
 
   form.addEventListener('submit', (e) => {
@@ -108,26 +123,28 @@ function enviarConfirmacao() {
     return;
   }
 
-  // Desabilita o botão durante o envio
+  // Feedback Visual de Carregamento
   btnEnviar.disabled = true;
   btnEnviar.style.opacity = '0.6';
-  statusEl.textContent = 'Enviando...';
+  btnEnviar.textContent = 'Enviando...';
+  statusEl.textContent = 'Processando sua confirmação...';
   statusEl.style.color = 'var(--ink-muted)';
 
-  // Simula envio (em produção, isso seria uma chamada a um servidor)
+  // Simulação de Envio (UX Profissional)
   setTimeout(() => {
-    statusEl.textContent = '✓ Confirmação recebida com sucesso! Obrigado por confirmar sua presença.';
+    statusEl.textContent = '✓ Confirmação recebida com sucesso! Obrigado.';
     statusEl.style.color = 'var(--forest)';
     
     // Limpa o formulário
-    document.getElementById('rsvp-nome').value = '';
-    document.querySelectorAll('input[name="rsvp-presenca"]').forEach(input => input.checked = false);
+    document.getElementById('rsvp-form').reset();
+    btnEnviar.textContent = 'Enviado!';
     
-    // Reabilita o botão após 3 segundos
+    // Reabilita o botão após um tempo
     setTimeout(() => {
       btnEnviar.disabled = false;
       btnEnviar.style.opacity = '1';
+      btnEnviar.textContent = 'Enviar Confirmação';
       statusEl.textContent = '';
-    }, 3000);
+    }, 4000);
   }, 1500);
 }

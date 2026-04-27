@@ -2,16 +2,17 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="Chá de Panela de Davi e Clara. Informações do evento, confirmação de presença e lista de presentes.">
   <meta name="theme-color" content="#ede3d4">
   <title>Chá de Panela — Davi & Clara</title>
   
-  <!-- Preload de fontes para melhor performance -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Jost:wght@300;400;500&display=swap&subset=latin" as="style">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Jost:wght@300;400;500&display=swap&subset=latin" rel="stylesheet">
+  <!-- Preload de fontes críticas para evitar o "pulo" de layout -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
   
-  <!-- CSS externo para melhor cache -->
+  <!-- CSS Externo (Mantido conforme original para cache) -->
   <link rel="stylesheet" href="style.css">
   
   <!-- SVG Icons -->
@@ -26,7 +27,7 @@
 <body>
 
 <!-- NAVEGAÇÃO -->
-<nav>
+<nav id="main-nav">
   <div class="logo">Chá de Panela ✦ Davi & Clara</div>
   <div class="nav-actions">
     <input type="checkbox" id="nav-menu-toggle" class="nav-cb" aria-hidden="true">
@@ -39,8 +40,8 @@
 </nav>
 
 <!-- HERO / INTRO -->
-<div class="intro">
-  <div class="hero-floral-frame">
+<header class="intro">
+  <div class="hero-floral-frame" aria-hidden="true">
     <svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
       <defs>
         <linearGradient id="gfPetal" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -85,10 +86,10 @@
   <div class="intro-inner">
     <div class="intro-headline">
       <div class="hero-badge">🍳 Chá de Panela</div>
-      <div class="hero-names">Davi<span> &amp; </span>Clara</div>
+      <h1 class="hero-names">Davi<span> &amp; </span>Clara</h1>
       <div class="hero-divider"></div>
-      <div class="hero-date">29 de Maio de 2026 · 19h30</div>
-      <div class="hero-tagline">Vem celebrar com a gente o início de um novo lar</div>
+      <p class="hero-date">29 de Maio de 2026 · 19h30</p>
+      <p class="hero-tagline">Vem celebrar com a gente o início de um novo lar</p>
     </div>
     <aside class="intro-aside">
       <p class="intro-aside-label">Informações do evento</p>
@@ -108,19 +109,19 @@
       </a>
     </aside>
   </div>
-</div>
+</header>
 
 <!-- CONFIRMAÇÃO DE PRESENÇA -->
 <section id="confirmacao" style="background: var(--surface);">
-  <div class="section-title">Confirmar Presença</div>
-  <div class="section-sub">Aguardamos sua resposta até o dia 10 de Maio</div>
+  <h2 class="section-title">Confirmar Presença</h2>
+  <p class="section-sub">Aguardamos sua resposta até o dia 10 de Maio</p>
   
   <div class="rsvp-form-wrapper">
     <p class="rsvp-quote">
       "Sua presença é o presente mais bonito que podemos receber."
     </p>
 
-    <form>
+    <form id="rsvp-form">
       <div class="form-group">
         <label for="rsvp-nome" class="form-label">Seu nome</label>
         <input 
@@ -129,6 +130,7 @@
           placeholder="Nome completo" 
           required
           class="form-input"
+          autocomplete="name"
         >
       </div>
 
@@ -185,19 +187,19 @@
     <div class="countdown-wrapper">
       <div id="countdown">
         <div class="countdown-item">
-          <div id="days" class="countdown-value">0</div>
+          <div id="days" class="countdown-value">00</div>
           <div class="countdown-label">Dias</div>
         </div>
         <div class="countdown-item">
-          <div id="hours" class="countdown-value">0</div>
+          <div id="hours" class="countdown-value">00</div>
           <div class="countdown-label">Horas</div>
         </div>
         <div class="countdown-item">
-          <div id="minutes" class="countdown-value">0</div>
+          <div id="minutes" class="countdown-value">00</div>
           <div class="countdown-label">Minutos</div>
         </div>
         <div class="countdown-item">
-          <div id="seconds" class="countdown-value">0</div>
+          <div id="seconds" class="countdown-value">00</div>
           <div class="countdown-label">Segundos</div>
         </div>
       </div>
@@ -207,8 +209,8 @@
 
 <!-- LISTA DE PRESENTES -->
 <section id="presentes">
-  <div class="section-title">Lista de Presentes</div>
-  <div class="section-sub">Um gesto de carinho para o nosso lar</div>
+  <h2 class="section-title">Lista de Presentes</h2>
+  <p class="section-sub">Um gesto de carinho para o nosso lar</p>
 
   <!-- VERSÍCULO -->
   <div class="verse-block">
@@ -252,19 +254,19 @@
         <span>Latte</span>
       </div>
       <div class="swatch-item">
-        <div class="swatch" style="background-color: #e8d4b8;"></div>
+        <div class="swatch" style="background-color: #c2b2a3;"></div>
         <span>Mel</span>
       </div>
       <div class="swatch-item">
-        <div class="swatch" style="background-color: #8b6f47;"></div>
+        <div class="swatch" style="background-color: #6f4e37;"></div>
         <span>Marrom Café</span>
       </div>
       <div class="swatch-item">
-        <div class="swatch" style="background-color: #c85a54;"></div>
+        <div class="swatch" style="background-color: #a0522d;"></div>
         <span>Terracota</span>
       </div>
       <div class="swatch-item">
-        <div class="swatch" style="background-color: #6b8e23;"></div>
+        <div class="swatch" style="background-color: #808000;"></div>
         <span>Verde Oliva</span>
       </div>
     </div>
@@ -379,10 +381,10 @@
       </div>
     </article>
     <article class="gift-card">
-      <div class="gift-card-media"><img loading="lazy" src="kit-frigideiras.webp" alt="Kit de frigideiras" width="400" height="400" decoding="async"></div>
+      <div class="gift-card-media"><img loading="lazy" src="frigideiras.webp" alt="Kit de frigideiras" width="400" height="400" decoding="async"></div>
       <div class="gift-card-body">
         <h3 class="gift-name">Kit de Frigideiras</h3>
-        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="kit-frigideiras" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
+        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="frigideiras" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
       </div>
     </article>
     <article class="gift-card">
@@ -435,10 +437,10 @@
       </div>
     </article>
     <article class="gift-card">
-      <div class="gift-card-media"><img loading="lazy" src="escorredor-louça.webp" alt="Escorredor de louça" width="400" height="400" decoding="async"></div>
+      <div class="gift-card-media"><img loading="lazy" src="escorredor-louca.webp" alt="Escorredor de louça" width="400" height="400" decoding="async"></div>
       <div class="gift-card-body">
         <h3 class="gift-name">Escorredor de Louça</h3>
-        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="escorredor-louça" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
+        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="escorredor-louca" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
       </div>
     </article>
   </div>
@@ -454,10 +456,10 @@
       </div>
     </article>
     <article class="gift-card">
-      <div class="gift-card-media"><img loading="lazy" src="rack-sala.webp" alt="Rack da sala" width="400" height="400" decoding="async"></div>
+      <div class="gift-card-media"><img loading="lazy" src="rack.webp" alt="Rack da sala" width="400" height="400" decoding="async"></div>
       <div class="gift-card-body">
         <h3 class="gift-name">Rack da Sala</h3>
-        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="rack-sala" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
+        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="rack" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
       </div>
     </article>
   </div>
@@ -636,8 +638,8 @@
   <p>Com gratidão pelo carinho e presença de vocês.</p>
 </footer>
 
-<!-- JavaScript externo para melhor performance -->
-<script src="script.js"></script>
+<!-- JavaScript Otimizado (Original com Melhorias de Performance) -->
+<script src="script.js" defer></script>
 
 </body>
 </html>
