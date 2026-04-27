@@ -30,7 +30,7 @@ function initGiftButtons() {
   // Botão do WhatsApp no topo da lista
   const mainWaBtn = document.getElementById('main-wa-btn');
   if (mainWaBtn) {
-    mainWaBtn.href = 'https://wa.me/5585999999999?text=Olá! Gostaria de falar sobre o Chá de Panela.';
+    mainWaBtn.href = 'https://wa.me/5585999999999?text=Olá! Tenho uma dúvida sobre o Chá de Panela.';
   }
 }
 
