@@ -3,7 +3,7 @@
 
 const CONFIG = {
   // Substitua pelo seu link real do WhatsApp
-  WHATSAPP_LINK: 'https://wa.me/5585999999999?text=Olá! Gostaria de presentear vocês com: ',
+  WHATSAPP_LINK: 'https://wa.me/5585998184396?text=Olá! Gostaria de presentear vocês com: ',
   TARGET_DATE: '2026-06-26T19:30:00'
 };
 
