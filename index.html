@@ -238,6 +238,17 @@
       background: rgba(160, 120, 64, 0.10); color: var(--gold);
       box-shadow: none; cursor: not-allowed; pointer-events: none;
     }
+    .gift-received {
+      background: var(--forest);
+      color: var(--white);
+      box-shadow: 0 3px 10px rgba(74, 107, 82, 0.28);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .gift-received:hover {
+      background: var(--forest);
+      box-shadow: 0 3px 10px rgba(74, 107, 82, 0.28);
+    }
 
     /* ── VERSÍCULO + INTRO ── */
     .verse-block {
@@ -601,6 +612,40 @@
   </div>
 </section>
 
+<!-- CONTAGEM REGRESSIVA -->
+<section id="contagem" style="background: linear-gradient(180deg, var(--paper) 0%, var(--surface) 100%); padding: 40px 20px;">
+  <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+    <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.95rem; color: var(--sage); margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500;">
+      Contagem Regressiva
+    </p>
+    
+    <p style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--ink-muted); margin-bottom: 24px; line-height: 1.6;">
+      "Nesse dia celebraremos diante de Deus e da Sua igreja nossa união, será uma honra ter sua presença."
+    </p>
+    
+    <div style="background: var(--white); border-radius: 12px; padding: 28px 24px; border: 1px solid var(--line); box-shadow: 0 2px 16px var(--shadow); max-width: 600px; margin: 0 auto;">
+      <div id="countdown" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+        <div style="background: var(--surface); border-radius: 6px; padding: 14px 8px; border: 1px solid var(--line);">
+          <div id="days" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--forest); line-height: 1;">0</div>
+          <div style="font-size: 0.65rem; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-muted); margin-top: 6px; font-weight: 500;">Dias</div>
+        </div>
+        <div style="background: var(--surface); border-radius: 6px; padding: 14px 8px; border: 1px solid var(--line);">
+          <div id="hours" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--forest); line-height: 1;">0</div>
+          <div style="font-size: 0.65rem; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-muted); margin-top: 6px; font-weight: 500;">Horas</div>
+        </div>
+        <div style="background: var(--surface); border-radius: 6px; padding: 14px 8px; border: 1px solid var(--line);">
+          <div id="minutes" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--forest); line-height: 1;">0</div>
+          <div style="font-size: 0.65rem; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-muted); margin-top: 6px; font-weight: 500;">Minutos</div>
+        </div>
+        <div style="background: var(--surface); border-radius: 6px; padding: 14px 8px; border: 1px solid var(--line);">
+          <div id="seconds" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--forest); line-height: 1;">0</div>
+          <div style="font-size: 0.65rem; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-muted); margin-top: 6px; font-weight: 500;">Segundos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <style>
   #rsvp-sim:checked + label,
   #rsvp-nao:checked + label {
@@ -610,6 +655,37 @@
     box-shadow: 0 2px 8px rgba(160, 120, 64, 0.3);
   }
 </style>
+
+<script>
+  function updateCountdown() {
+    // Data do evento: 26 de junho de 2026 às 19h30
+    const eventDate = new Date('2026-06-26T19:30:00').getTime();
+    const now = new Date().getTime();
+    const distance = eventDate - now;
+
+    if (distance < 0) {
+      document.getElementById('days').textContent = '0';
+      document.getElementById('hours').textContent = '0';
+      document.getElementById('minutes').textContent = '0';
+      document.getElementById('seconds').textContent = '0';
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById('days').textContent = String(days).padStart(2, '0');
+    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+  }
+
+  // Atualizar a contagem regressiva imediatamente e a cada segundo
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
 
 <script>
   const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xbdqakla';
@@ -981,7 +1057,7 @@
       <div class="gift-card-body">
         <h3 class="gift-name">Cama do casal</h3>
 
-        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="cama" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
+        <a class="gift-buy gift-received" href="#" data-gift-key="cama" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Já ganhamos, graças a Deus</span></a>
       </div>
       
   <div class="gift-grid">
@@ -1055,7 +1131,7 @@
       <div class="gift-card-body">
         <h3 class="gift-name">Máquina de Lavar</h3>
 
-        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="maquina-lavar" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
+        <a class="gift-buy gift-received" href="#" data-gift-key="maquina-lavar" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Já ganhamos, graças a Deus</span></a>
       </div>
     </article>
     <article class="gift-card">
@@ -1166,7 +1242,7 @@
       <div class="gift-card-media"><img src="espelho-banheiro.webp" alt="Espelho" width="400" height="400" loading="lazy" decoding="async"></div>
       <div class="gift-card-body">
         <h3 class="gift-name">Espelho</h3>
-        <a class="gift-buy gift-buy--pending" href="#" data-gift-key="espelho-banheiro" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Presentear</span></a>
+        <a class="gift-buy gift-received" href="#" data-gift-key="espelho-banheiro" target="_blank" rel="noopener noreferrer"><svg width="18" height="18" aria-hidden="true"><use href="#ico-presentear"/></svg><span>Já ganhamos, graças a Deus</span></a>
       </div>
     </article>
   </div>
