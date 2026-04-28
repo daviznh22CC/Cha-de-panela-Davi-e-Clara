@@ -4,7 +4,8 @@
 const CONFIG = {
   // Substitua pelo seu link real do WhatsApp
   WHATSAPP_LINK: 'https://wa.me/5585998184396?text=Olá! Gostaria de presentear vocês com: ',
-  TARGET_DATE: '2026-06-26T19:30:00'
+  TARGET_DATE: '2026-06-26T19:30:00',
+  FORMSPREE_ENDPOINT: 'https://formspree.io/f/xbdqakla'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -92,28 +93,62 @@ function initNavScroll() {
   }, { passive: true });
 }
 
-// 4. RSVP Form
+// 4. RSVP Form — Envio real via Formspree
 function initFormHandling() {
   const form = document.getElementById('rsvp-form');
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const nome = document.getElementById('rsvp-nome').value.trim();
-    const presenca = document.querySelector('input[name="rsvp-presenca"]:checked').value;
+    const presencaEl = document.querySelector('input[name="rsvp-presenca"]:checked');
     const btnEnviar = document.getElementById('rsvp-btn-enviar');
     const statusEl = document.getElementById('rsvp-status');
 
+    // Validação básica
+    if (!nome || !presencaEl) {
+      statusEl.textContent = '⚠ Por favor, preencha todos os campos.';
+      statusEl.style.color = 'var(--wood-deep)';
+      return;
+    }
+
+    const presenca = presencaEl.value;
+
+    // Estado de carregamento
     btnEnviar.disabled = true;
     btnEnviar.textContent = 'Enviando...';
-    
-    // Feedback visual
-    setTimeout(() => {
-      statusEl.textContent = '✓ Confirmação recebida! Obrigado.';
-      statusEl.style.color = 'var(--forest)';
-      form.reset();
-      btnEnviar.textContent = 'Enviado!';
-    }, 1500);
+    statusEl.textContent = '';
+
+    try {
+      const response = await fetch(CONFIG.FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ nome, presenca })
+      });
+
+      if (response.ok) {
+        // Sucesso
+        statusEl.textContent = '✓ Confirmação recebida! Obrigado, ' + nome + ' 🎉';
+        statusEl.style.color = 'var(--forest)';
+        form.reset();
+        btnEnviar.textContent = 'Enviado!';
+      } else {
+        // Erro vindo do Formspree (ex: formulário inativo, limite excedido)
+        const data = await response.json().catch(() => ({}));
+        const msg = data?.error || 'Não foi possível enviar. Tente novamente.';
+        throw new Error(msg);
+      }
+    } catch (err) {
+      // Erro de rede ou do servidor
+      statusEl.textContent = '✗ ' + (err.message || 'Erro ao enviar. Verifique sua conexão e tente novamente.');
+      statusEl.style.color = '#b94040';
+      btnEnviar.disabled = false;
+      btnEnviar.textContent = 'Tentar novamente';
+    }
   });
 }
 
